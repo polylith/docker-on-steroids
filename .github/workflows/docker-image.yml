@@ -20,5 +20,5 @@ jobs:
         context: .
         file: ./Dockerfile.1
         build-args: |
-          PYPI_USERNAME = ${{ secrets.PYPI_PASSWORD }}
-          PYPI_PASSWORD = ${{ secrets.PYPI_USERNAME }}
+          PYPI_USERNAME: ${{ secrets.PYPI_PASSWORD }}
+          PYPI_PASSWORD: ${{ secrets.PYPI_USERNAME }}
