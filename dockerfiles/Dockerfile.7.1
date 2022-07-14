@@ -1,0 +1,53 @@
+FROM python:3 as base
+RUN pip install poetry
+
+###
+
+FROM base AS dependencies
+WORKDIR /app
+
+ENV POETRY_VIRTUALENVS_IN_PROJECT=true
+ENV POETRY_CACHE_DIR=/cache
+
+ADD pyproject.toml pyproject.toml
+ADD poetry.lock poetry.lock
+
+RUN poetry install --no-dev
+
+###
+
+FROM base AS dev-dependencies
+WORKDIR /app
+
+ENV POETRY_VIRTUALENVS_IN_PROJECT=true
+ENV POETRY_CACHE_DIR=/cache
+
+ADD pyproject.toml pyproject.toml
+ADD poetry.lock poetry.lock
+
+RUN poetry install
+
+###
+
+FROM base AS tests
+WORKDIR /app
+
+ENV POETRY_VIRTUALENVS_IN_PROJECT=true
+ENV POETRY_CACHE_DIR=/cache
+
+ADD . .
+
+COPY --from=dev-dependencies /app/.venv /app/.venv
+
+RUN /app/.venv/bin/pytest /app
+
+###
+
+FROM base
+WORKDIR /app
+
+ADD . .
+COPY --from=dependencies /app/.venv /app/.venv
+
+ENV FLASK_APP=app
+CMD ["/app/.venv/bin/flask", "run"]
