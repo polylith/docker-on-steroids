@@ -38,3 +38,5 @@ jobs:
         build-args: |
           PYPI_USERNAME=${{ secrets.PYPI_USERNAME }}
           PYPI_PASSWORD=${{ secrets.PYPI_PASSWORD }}
+        tags: |
+          ghcr.io/polylith/docker-on-steroids:latest
