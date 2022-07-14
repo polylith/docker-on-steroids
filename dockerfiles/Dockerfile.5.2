@@ -24,9 +24,6 @@ RUN --mount=type=cache,id=dev-dependencies,target=/app/.venv --mount=type=cache,
     poetry install
 RUN --mount=type=cache,id=dev-dependencies,target=/app/.venv /app/.venv/bin/pytest /app
 
-RUN --mount=type=cache,id=poetry-cache,target=/cache \
-    poetry install --no-dev
-
 ENV FLASK_APP=app
 ENTRYPOINT ["dumb-init"]
 CMD ["/app/.venv/bin/flask", "run"]

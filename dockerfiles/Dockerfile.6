@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.4
 FROM python:3 as base
 
 ###
@@ -20,11 +21,11 @@ RUN --mount=type=tmpfs,target=/app/.venv --mount=type=cache,id=poetry-cache,targ
 
 ADD . .
 
-RUN --mount=type=cache,id=dev-dependencies,target=/app/.venv --mount=type=cache,id=poetry-cache,target=/cache \
+RUN --network=none --mount=type=cache,id=dev-dependencies,target=/app/.venv --mount=type=cache,id=poetry-cache,target=/cache \
     poetry install
 RUN --mount=type=cache,id=dev-dependencies,target=/app/.venv /app/.venv/bin/pytest /app
 
-RUN --mount=type=cache,id=poetry-cache,target=/cache \
+RUN --network=none --mount=type=cache,id=poetry-cache,target=/cache \
     poetry install --no-dev
 
 ENV FLASK_APP=app
