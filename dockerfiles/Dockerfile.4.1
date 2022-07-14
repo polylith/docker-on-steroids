@@ -5,9 +5,6 @@ FROM python:3 as base
 FROM base
 WORKDIR /app
 
-ARG PYPI_USERNAME
-ARG PYPI_PASSWORD
-
 RUN pip install poetry
 ENV POETRY_VIRTUALENVS_IN_PROJECT=true
 ENV POETRY_CACHE_DIR=/cache
@@ -19,7 +16,7 @@ ADD pyproject.toml pyproject.toml
 ADD poetry.lock poetry.lock
 
 RUN --mount=type=cache,id=poetry-cache,target=/app/.venv \
-    POETRY_HTTP_BASIC_ENTWICKLERHELD_USERNAME=$PYPI_USERNAME POETRY_HTTP_BASIC_ENTWICKLERHELD_PASSWORD=$PYPI_PASSWORD poetry install --no-dev
+    poetry install --no-dev
 
 ADD . .
 

@@ -1,6 +1,4 @@
 FROM python:3
-ARG PYPI_USERNAME
-ARG PYPI_PASSWORD
 
 WORKDIR /app
 
@@ -15,7 +13,7 @@ ENV POETRY_CACHE_DIR=/cache
 ADD pyproject.toml pyproject.toml
 ADD poetry.lock poetry.lock
 
-RUN POETRY_HTTP_BASIC_ENTWICKLERHELD_USERNAME=$PYPI_USERNAME POETRY_HTTP_BASIC_ENTWICKLERHELD_PASSWORD=$PYPI_PASSWORD poetry install --no-dev
+RUN poetry install --no-dev
 
 ADD . .
 

@@ -16,9 +16,11 @@ ADD pyproject.toml pyproject.toml
 ADD poetry.lock poetry.lock
 
 RUN --mount=type=cache,id=poetry-cache,target=/cache \
-    poetry install --no-dev
+    poetry install
 
 ADD . .
+
+RUN /app/.venv/bin/pytest /app
 
 ENV FLASK_APP=app
 ENTRYPOINT ["dumb-init"]
