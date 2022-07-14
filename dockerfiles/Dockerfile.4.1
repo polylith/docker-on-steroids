@@ -1,26 +1,33 @@
 FROM python:3 as base
+RUN pip install poetry
+ENV POETRY_VIRTUALENVS_IN_PROJECT=true
+ENV POETRY_CACHE_DIR=/cache
 
 ###
 
-FROM base
+FROM base AS dependencies
 WORKDIR /app
 ARG PYPI_USERNAME
 ARG PYPI_PASSWORD
 
 RUN pip install poetry
-ENV POETRY_VIRTUALENVS_IN_PROJECT=true
-ENV POETRY_CACHE_DIR=/cache
-
-RUN --mount=type=cache,id=apt-cache,target=/var/lib/apt/lists/ apt-get update
-RUN --mount=type=cache,id=apt-cache,target=/var/lib/apt/lists/ apt-get install -y --no-install-recommends dumb-init
 
 ADD pyproject.toml pyproject.toml
 ADD poetry.lock poetry.lock
 
-RUN --mount=type=cache,id=dependencies,target=/app/.venv \
-    POETRY_HTTP_BASIC_ENTWICKLERHELD_USERNAME=$PYPI_USERNAME POETRY_HTTP_BASIC_ENTWICKLERHELD_PASSWORD=$PYPI_PASSWORD poetry install --no-dev
+RUN --mount=type=cache,id=poetry-cache,target=/app/.venv POETRY_HTTP_BASIC_ENTWICKLERHELD_USERNAME=$PYPI_USERNAME POETRY_HTTP_BASIC_ENTWICKLERHELD_PASSWORD=$PYPI_PASSWORD poetry install --no-dev
+
+###
+
+FROM base
+WORKDIR /app
+
+RUN --mount=type=cache,id=apt-cache,target=/var/lib/apt/lists/ apt-get update
+RUN --mount=type=cache,id=apt-cache,target=/var/lib/apt/lists/ apt-get install -y --no-install-recommends dumb-init
 
 ADD . .
+
+RUN --mount=type=cache,id=poetry-cache,target=/app/.venv POETRY_HTTP_BASIC_ENTWICKLERHELD_USERNAME=$PYPI_USERNAME POETRY_HTTP_BASIC_ENTWICKLERHELD_PASSWORD=$PYPI_PASSWORD poetry install --no-dev
 
 ENV FLASK_APP=app
 ENTRYPOINT ["dumb-init"]
