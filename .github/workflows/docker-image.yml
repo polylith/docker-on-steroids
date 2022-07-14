@@ -58,7 +58,7 @@ jobs:
         tags: |
           ghcr.io/polylith/docker-on-steroids-2:latest
         push: true
-  build2-inline-cache:
+  build1-inline-cache:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -77,14 +77,14 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: .
-        file: ./dockerfiles/Dockerfile.2
+        file: ./dockerfiles/Dockerfile.1
         build-args: |
           PYPI_USERNAME=${{ secrets.PYPI_USERNAME }}
           PYPI_PASSWORD=${{ secrets.PYPI_PASSWORD }}
         tags: |
-          ghcr.io/polylith/docker-on-steroids-2-inline-cache:latest
+          ghcr.io/polylith/docker-on-steroids-1-inline-cache:latest
         push: true
-        cache-from: type=registry,ref=ghcr.io/polylith/docker-on-steroids-2-inline-cache:latest
+        cache-from: type=registry,ref=ghcr.io/polylith/docker-on-steroids-1-inline-cache:latest
         cache-to: type=inline
   build2-registry-cache:
     runs-on: ubuntu-latest
