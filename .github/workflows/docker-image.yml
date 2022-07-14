@@ -77,10 +77,10 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: .
-        file: ./Dockerfile.3
+        file: ./Dockerfile.2
         build-args: |
           PYPI_USERNAME=${{ secrets.PYPI_USERNAME }}
           PYPI_PASSWORD=${{ secrets.PYPI_PASSWORD }}
         tags: |
-          ghcr.io/polylith/docker-on-steroids-3:latest
+          ghcr.io/polylith/docker-on-steroids-2-cache:latest
         push: true
