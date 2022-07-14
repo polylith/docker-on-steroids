@@ -14,7 +14,7 @@ ENV POETRY_CACHE_DIR=/cache
 ADD pyproject.toml pyproject.toml
 ADD poetry.lock poetry.lock
 
-RUN POETRY_HTTP_BASIC_ENTWICKLERHELD_USERNAME=$PYPI_USERNAME POETRY_HTTP_BASIC_ENTWICKLERHELD_PASSWORD=$PYPI_PASSWORD poetry install
+RUN POETRY_HTTP_BASIC_ENTWICKLERHELD_USERNAME=$PYPI_USERNAME POETRY_HTTP_BASIC_ENTWICKLERHELD_PASSWORD=$PYPI_PASSWORD poetry install --no-dev
 
 ###
 
@@ -27,8 +27,6 @@ RUN apt-get update \
 
 ADD . .
 COPY --from=dependencies /app/.venv /app/.venv
-
-RUN /app/.venv/bin/pytest /app
 
 ENV FLASK_APP=app
 ENTRYPOINT ["dumb-init"]

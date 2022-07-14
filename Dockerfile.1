@@ -19,8 +19,6 @@ RUN POETRY_HTTP_BASIC_ENTWICKLERHELD_USERNAME=$PYPI_USERNAME POETRY_HTTP_BASIC_E
 
 ADD . .
 
-RUN /app/.venv/bin/pytest /app
-
 ENV FLASK_APP=app
 ENTRYPOINT ["dumb-init"]
 CMD ["/app/.venv/bin/flask", "run"]
