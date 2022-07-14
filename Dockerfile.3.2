@@ -21,8 +21,9 @@ RUN POETRY_HTTP_BASIC_ENTWICKLERHELD_USERNAME=$PYPI_USERNAME POETRY_HTTP_BASIC_E
 FROM base
 WORKDIR /app
 
-RUN --mount=type=cache,id=apt-cache,target=/var/lib/apt/lists/ apt-get update
-RUN --mount=type=cache,id=apt-cache,target=/var/lib/apt/lists/ apt-get install -y --no-install-recommends dumb-init
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends dumb-init \
+    && rm -rf /var/lib/apt/lists/*
 
 ADD . .
 COPY --from=dependencies /app/.venv /app/.venv
