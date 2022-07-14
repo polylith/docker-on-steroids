@@ -82,5 +82,7 @@ jobs:
           PYPI_USERNAME=${{ secrets.PYPI_USERNAME }}
           PYPI_PASSWORD=${{ secrets.PYPI_PASSWORD }}
         tags: |
-          ghcr.io/polylith/docker-on-steroids-2-cache:latest
+          ghcr.io/polylith/docker-on-steroids-2-with-cache:latest
         push: true
+        cache-from: type=registry,ref=ghcr.io/polylith/docker-on-steroids-2-with-cache:latest
+        cache-to: type=inline
